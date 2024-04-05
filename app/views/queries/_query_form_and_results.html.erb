@@ -1,0 +1,45 @@
+<turbo-frame id="query">
+  <%= form_with url: :queries do |form| %>
+    <div class="space-y-4">
+      <p><%= form.text_area :query, value: @query, rows: 8, class: 'px-4 py-2 w-full block w-full rounded-md border-0 py-1.5 text-gray-800 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"' %></p>
+      <p><%= form.submit "Run", class: 'cursor-pointer rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %></p>
+    </div>
+  <% end %>
+
+  <% if @results&.is_a?(Array) && @cols&.any? %>
+    <div class="mt-8 font-semibold w-full bg-gray-600 text-white p-4">
+      <%= @results.size %> results.
+    </div>
+    <div class="w-full bg-gray-900 px-4 sm:px-6 lg:px-8">
+      <div class="mt-1 flow-root">
+        <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 align-middle">
+            <table class="min-w-full border-separate border-spacing-0">
+              <thead>
+                <tr>
+                  <%= @cols.each do |col| %>
+                    <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"><%= col %></th>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <% @results.each do |result| %>
+                  <tr>
+                    <% @cols.each do |col| %>
+                      <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6 lg:pl-8"><%= result[col] %></td>
+                    <% end %>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+  <% if @results&.is_a?(String) %>
+    <p class="my-4 p-4 bg-gray-800 text-white"><%= @results %></p>
+  <% end %>
+</turbo-frame>
